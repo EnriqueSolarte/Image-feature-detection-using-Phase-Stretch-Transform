@@ -54,7 +54,7 @@ import numpy as np
 import mahotas as mh
 import matplotlib.pylab as plt
 from itertools import zip_longest
-from PST_function import PST
+from pst.pst import PST
 
 # [] To process high resolution images set 
 # from PIL import Image
@@ -68,14 +68,14 @@ from PST_function import PST
 # Import the original image
 input_path = os.getcwd() # This is where the code is running. 
 filepath = os.path.join(input_path,'../Test_Images/cameraman.tif')  # The images are located in a folder called 'Test_Images' within the root directory from where the code runs.
-
+filepath= "/home/kike/Documents/tiqi_project/Image-feature-detection-using-Phase-Stretch-Transform/Test_Images/cameraman.tif"
 #filepath = os.path.join(input_path,'../Test_Images/',sys.argv[1])
 # [] To input filename using command line argument uncomment ^^^
 
 Image_orig = mh.imread(filepath) # Read the image.
 # To convert the color image to grayscale
 if Image_orig.ndim ==3:
-    Image_orig_grey = mh.colors.rgb2grey(Image_orig)  # Image_orig is color image.
+    Image_orig_grey = mh.colors.rgb2grey(Image_orig)  # Image_orig condais color image.
 else: 
     Image_orig_grey = Image_orig
     
@@ -89,7 +89,7 @@ Warp_strength= 12.14
 Threshold_min = -1
 Threshold_max = 0.0019
 # [] Choose to compute the analog or digital edge,
-Morph_flag =1 # [] To compute analog edge, set Morph_flag=0 and to compute digital edge, set Morph_flag=1
+Morph_flag =0 # [] To compute analog edge, set Morph_flag=0 and to compute digital edge, set Morph_flag=1
 
  
 [Edge, PST_Kernel]= PST(Image_orig_grey, LPF, Phase_strength, Warp_strength, Threshold_min, Threshold_max, Morph_flag)
@@ -102,6 +102,7 @@ if Morph_flag ==0:
         for ax, img, label in zip_longest(axes.ravel(), image_pair, titles, fillvalue=''):
             ax.imshow(img, **kwargs)
             ax.set_title(label)
+        plt.show()
     # show the original image and detected edges
     print('        Original Image       Edge Detected using PST')
     imshow_pair((Image_orig, Edge), cmap='gray')
@@ -121,6 +122,8 @@ else:
         for ax, img, label in zip_longest(axes.ravel(), image_pair, titles, fillvalue=''):
             ax.imshow(img, **kwargs)
             ax.set_title(label)
+        
+        plt.show()
     # show the original image, detected edges and an overlay of the original image with detected edges       
     print('      Original Image            Edge Detected using PST              Overlay')
     imshow_pair((Image_orig, Edge, Overlay), cmap='gray')
